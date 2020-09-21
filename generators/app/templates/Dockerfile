@@ -1,0 +1,7 @@
+FROM node:12-alpine
+ARG APP_CODE_PATH_CONTAINER=/app
+COPY ./ ${APP_CODE_PATH_CONTAINER}
+WORKDIR ${APP_CODE_PATH_CONTAINER}
+RUN npm install
+RUN npm run build
+CMD npm start

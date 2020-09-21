@@ -1,0 +1,21 @@
+{
+  "name": "generator-ts",
+  "version": "1.0.0",
+  "description": "A light yeoman generator for TS projets scaffolding",
+  "repository": "https://github.com/obrassard/generator-ts.git",
+  "main": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "yeoman-generator"
+  ],
+  "author": "Olivier Brassard",
+  "license": "MIT",
+  "files": [
+    "generators"
+  ],
+  "dependencies": {
+    "yeoman-generator": "^4.12.0"
+  }
+}

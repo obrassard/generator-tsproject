@@ -1,0 +1,14 @@
+{
+    "name": "<%= appname %>",
+    "version": "1.0.0",
+    "description": "",
+    "main": "main.ts",
+    "scripts": {
+        "start": "node build/main.js",
+        "dev": "ts-node --files ./src/main.ts",
+        "build": "npm run clean && tsc",
+        <% if (nodemon) { %>"watch": "nodemon",<% }%>
+        <% if (jest) { %>"test": "jest --colors",<% } %>
+        "clean": "rimraf dist"
+    }
+}

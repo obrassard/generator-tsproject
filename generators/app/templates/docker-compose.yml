@@ -1,0 +1,11 @@
+version: '3'
+services:
+  node:
+    build: ./
+    container_name: node_ts
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/app
+    working_dir: /app
+    command: npm run watch
