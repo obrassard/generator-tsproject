@@ -1,6 +1,6 @@
 {
   "name": "generator-tsproj",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A light yeoman generator for TS projets scaffolding",
   "repository": "https://github.com/obrassard/generator-ts.git",
   "main": "",
