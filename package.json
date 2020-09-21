@@ -1,5 +1,5 @@
 {
-  "name": "generator-ts",
+  "name": "generator-tsproj",
   "version": "1.0.0",
   "description": "A light yeoman generator for TS projets scaffolding",
   "repository": "https://github.com/obrassard/generator-ts.git",
@@ -17,5 +17,6 @@
   ],
   "dependencies": {
     "yeoman-generator": "^4.12.0"
-  }
+  },
+  "publishConfig": { "registry": "https://npm.pkg.github.com/" }
 }
