@@ -7,5 +7,5 @@ A light yeoman generator for TS projets scaffolding
 ```
 npm install -g yo
 npm install -g generator-tsproj
-yo tsproj
+yo tsproj <project-name>
 ```
