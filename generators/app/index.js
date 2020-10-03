@@ -45,6 +45,12 @@ module.exports = class extends Generator {
                 name: "docker",
                 default: true,
                 message: "Add Docker config ?"
+            },
+            {
+                type: "confirm",
+                name: "ghActions",
+                default: true,
+                message: "Use GitHub Actions for CI ?"
             }
         ]);
 
@@ -127,6 +133,16 @@ module.exports = class extends Generator {
             this.fs.copy(
                 this.templatePath('nodemon.json'),
                 this.destinationPath(`./${this.options.appname}/nodemon.json`),
+            )
+        }
+
+        if (this.answers.ghActions) {
+            this.fs.copyTpl(
+                this.templatePath('ga-node-ci.yml.ejs'),
+                this.destinationPath(`./${this.options.appname}/.github/workflows/node-ci.yml`),
+                {
+                    pkg : this.answers.packageManager
+                }
             )
         }
     }
