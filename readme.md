@@ -46,4 +46,4 @@ When all options are enabled, this is what a generated project looks like :
 │   └── main.test.ts
 ├── tsconfig.json
 └── yarn.lock
-``` 
+```
