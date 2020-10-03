@@ -148,6 +148,7 @@ module.exports = class extends Generator {
     }
 
     install() {
+        this.log('Installing packages ...')
         this._addToPackagesQueue('typescript', true);
         this._addToPackagesQueue('@types/node', true);
         this._addToPackagesQueue('ts-node', true);
@@ -175,10 +176,16 @@ module.exports = class extends Generator {
     }
     
     end() {
-        this.log('Intializing git')
-        this.spawnCommandSync('git', ['init', this.options.appname]);
-
+        this._intializeGit();
         this.log('All done ! Congrats ✨')
+    }
+
+    _intializeGit() {
+        this.log('Intializing Git ...')
+        this.spawnCommandSync('git', ['init', this.options.appname]);
+        this.spawnCommandSync('git', ['add', '*'], { 'cwd': this.options.appname });
+        this.spawnCommandSync('git', ['add', '.*'], { 'cwd': this.options.appname });
+        this.spawnCommandSync('git', ['commit', '-m', 'Initial commit'], { 'cwd': this.options.appname });
     }
 
     _addToPackagesQueue(name, dev = false) {
