@@ -1,8 +1,8 @@
 <img src="https://i.imgur.com/fAmJYWo.png" alt="TypeScript Logo" width="100"/>
 
-# generator-tsproj
+# generator-tsproject
 
-**This project is a light [Yeoman generator](https://yeoman.io) for TypeScript projets scaffolding**
+**A light, yet convenient, [Yeoman generator](https://yeoman.io) for TypeScript + Node.JS projects**
 
 This generator will allows you to customize and scaffold your next TypeScript project in seconds. 
 
@@ -14,14 +14,14 @@ Psst ! It can also generate development Docker files and workflow files for Gith
 
 <br>
 
-[![See this package on NPM](https://img.shields.io/badge/-See%20this%20package%20on%20npm-CB3837?style=for-the-badge&logo=npm&logoColor=white)](https://www.npmjs.com/package/generator-tsproj)
+[![See this package on NPM](https://img.shields.io/badge/-See%20this%20package%20on%20npm-CB3837?style=for-the-badge&logo=npm&logoColor=white)](https://www.npmjs.com/package/generator-tsproject)
 
 ## Getting started
 
 ```
 npm install -g yo
-npm install -g generator-tsproj
-yo tsproj <project-name>
+npm install -g generator-tsproject
+yo tsproject <project-name>
 ```
 
 ***
