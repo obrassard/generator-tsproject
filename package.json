@@ -1,6 +1,6 @@
 {
   "name": "generator-tsproject",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A light, yet convenient, code generator for TypeScript + Node.JS projects",
   "repository": "https://github.com/obrassard/generator-tsproject.git",
   "main": "",

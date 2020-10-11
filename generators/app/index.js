@@ -1,14 +1,11 @@
 var Generator = require('yeoman-generator');
-
+var packageQueues = require('../packagesQueues');
 module.exports = class extends Generator {
 
-    // The name `constructor` is important here
     constructor(args, opts) {
         super(args, opts);
         this.argument("appname", { type: String, required: true });
         this.options.appname = this.options.appname.replace(/[^a-z0-9]/gi, '-').toLowerCase();
-        this._packagesQueue = [];
-        this._devPackagesQueue = [];
     }
 
     async prompting() {
@@ -19,12 +16,6 @@ module.exports = class extends Generator {
                 default: true,
                 message: "Add nodemon ?"
             },
-            // {
-            //     type: "confirm",
-            //     name: "express",
-            //     default: false,
-            //     message: "Add express.js ?"
-            // },
             {
                 type: "list",
                 name: "packageManager",
@@ -66,7 +57,9 @@ module.exports = class extends Generator {
                 nodemon: this.answers.nodemon,
                 jest: this.answers.jest,
                 pkg : this.answers.packageManager,
-                runCmd: this.options.runCmd
+                runCmd: this.options.runCmd,
+                entrypoint: this.options.express ? 'index':'main',
+                express: this.options.express
             }
         );
 
@@ -82,10 +75,12 @@ module.exports = class extends Generator {
             }
         );
 
-        this.fs.copy(
-            this.templatePath('main.ts'),
-            this.destinationPath(`./${this.options.appname}/src/main.ts`),
-        )
+        if (!this.options.express) {
+            this.fs.copy(
+                this.templatePath('main.ts'),
+                this.destinationPath(`./${this.options.appname}/src/main.ts`),
+            )
+        }
 
         this.fs.copy(
             this.templatePath('tsconfig.json'),
@@ -118,10 +113,18 @@ module.exports = class extends Generator {
         }
 
         if (this.answers.jest) {
-            this.fs.copy(
-                this.templatePath('main.test.ts'),
-                this.destinationPath(`./${this.options.appname}/tests/main.test.ts`),
-            )
+
+            if (!this.options.express)
+                this.fs.copy(
+                    this.templatePath('main.test.ts'),
+                    this.destinationPath(`./${this.options.appname}/tests/main.test.ts`),
+                )
+            else {
+                this.fs.copy(
+                    this.templatePath('express.test.ts'),
+                    this.destinationPath(`./${this.options.appname}/tests/express.test.ts`),
+                )
+            }
 
             this.fs.copy(
                 this.templatePath('jest.config.js'),
@@ -149,27 +152,23 @@ module.exports = class extends Generator {
 
     install() {
         this.log('Installing packages ...')
-        this._addToPackagesQueue('typescript', true);
-        this._addToPackagesQueue('@types/node', true);
-        this._addToPackagesQueue('ts-node', true);
-        this._addToPackagesQueue('rimraf', true);
-        this._addToPackagesQueue('dotenv');
+        packageQueues.addToPackagesQueue('typescript', true);
+        packageQueues.addToPackagesQueue('@types/node', true);
+        packageQueues.addToPackagesQueue('ts-node', true);
+        packageQueues.addToPackagesQueue('rimraf', true);
+        packageQueues.addToPackagesQueue('dotenv');
 
         if (this.answers.nodemon) {
-            this._addToPackagesQueue('nodemon', true);
-        }
-
-        if (this.answers.express) {
-            this._addToPackagesQueue('express');
-            this._addToPackagesQueue('@types/expres', true);
+            packageQueues.addToPackagesQueue('nodemon', true);
         }
 
         if (this.answers.jest) {
-            this._addToPackagesQueue('jest', true);
-            this._addToPackagesQueue('jest-extended', true);
-            this._addToPackagesQueue('ts-jest', true);
-            this._addToPackagesQueue('@types/jest', true);
-            this._addToPackagesQueue('supertest', true);
+            packageQueues.addToPackagesQueue('jest', true);
+            packageQueues.addToPackagesQueue('jest-extended', true);
+            packageQueues.addToPackagesQueue('ts-jest', true);
+            packageQueues.addToPackagesQueue('@types/jest', true);
+            packageQueues.addToPackagesQueue('supertest', true);
+            packageQueues.addToPackagesQueue('@types/supertest', true);
         }
 
         this._installPackages();
@@ -188,31 +187,23 @@ module.exports = class extends Generator {
         this.spawnCommandSync('git', ['commit', '-m', 'Initial commit'], { 'cwd': this.options.appname });
     }
 
-    _addToPackagesQueue(name, dev = false) {
-        if (dev) {
-            this._devPackagesQueue.push(name)
-        } else {
-            this._packagesQueue.push(name)
-        }
-    }
-
     _installPackages() {
 
         // Install required dependencies
-        if (this._packagesQueue.length) {
+        if (packageQueues.packagesQueue.length) {
             if (this.answers.packageManager == 'npm' ) {
-                this.npmInstall(this._packagesQueue, { 'save-dev': false }, { 'cwd': this.options.appname });
+                this.npmInstall(packageQueues.packagesQueue, { 'save-dev': false }, { 'cwd': this.options.appname });
             } else if (this.answers.packageManager == 'yarn') {
-                this.yarnInstall(this._packagesQueue, { 'dev': false }, { 'cwd': this.options.appname });
+                this.yarnInstall(packageQueues.packagesQueue, { 'dev': false }, { 'cwd': this.options.appname });
             }
         }
 
         // Install required dev-dependencies
-        if (this._devPackagesQueue.length) {
+        if (packageQueues.devPackagesQueue.length) {
             if (this.answers.packageManager == 'npm' ) {
-                this.npmInstall(this._devPackagesQueue, { 'save-dev': true }, { 'cwd': this.options.appname });
+                this.npmInstall(packageQueues.devPackagesQueue, { 'save-dev': true }, { 'cwd': this.options.appname });
             } else if (this.answers.packageManager == 'yarn') {
-                this.yarnInstall(this._devPackagesQueue, { 'dev': true }, { 'cwd': this.options.appname });
+                this.yarnInstall(packageQueues.devPackagesQueue, { 'dev': true }, { 'cwd': this.options.appname });
             }
         }       
     }

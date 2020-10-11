@@ -4,14 +4,19 @@
     "description": "",
     "license": "UNLICENSED",
     "repository": "",
-    "main": "main.ts",
+    "main": "src/<%= entrypoint %>.ts",
     "scripts": {
-        "start": "node build/main.js",
-        "dev": "ts-node --files ./src/main.ts",
+        "start": "node build/<%= entrypoint %>.js",
+        "dev": "ts-node --files ./src/<%= entrypoint %>.ts",
         "build": "tsc",
         <% if (nodemon) { %>"watch": "nodemon",<% }%>
         <% if (jest) { %>"test": "jest --colors",<% } %>
-        "clean": "rimraf build",
-        "prebuild": "rimraf build"
+        "prebuild": "rimraf build",
+        <% if (express) { %>
+        "postbuild": "<%= pkg %> run copyViews && <%= pkg %> run copyStatic",
+        "copyViews": "copyfiles -u 1 src/views/* src/views/**/* build",
+        "copyStatic": "copyfiles -u 1 src/static/* src/static/**/* build",
+        <% }%>
+        "clean": "rimraf build"
     }
 }
